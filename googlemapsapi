@@ -1,0 +1,50 @@
+import googlemaps
+
+key = "AIzaSyB0z-dbGWsnUXJZVeN4_E-lERVuFA9xYM8"
+client = googlemaps.Client(key)
+
+
+### open the csv file, REMEMBER TO CHANGE FILE NAME
+file_data = open('test2.csv').readlines()
+
+### setting up pairs from the csv files
+pairs = []
+
+for x in file_data:
+    for y in file_data:
+        if x == y:
+            break
+        pairs.append([x.strip(), y.strip()])
+
+mode = 'driving'
+units= 'imperial'
+count = 0
+
+### print table headers
+print "origin|destination|origin_address|destination_address|duration (min)|distance (m)"
+
+for pair in pairs:
+    origin = pair[0]
+    destination = pair[1]
+    result = []
+
+    #### This is where the code speaks with google
+    RouteData = client.distance_matrix(origin, destination, mode=mode, units=units)
+
+    ### googles reply with info, add it into results list
+    result.append(origin)
+    result.append(destination)
+    result.append(RouteData['origin_addresses'][0])
+    result.append(RouteData['destination_addresses'][0])
+
+    for row in RouteData['rows']:
+        for element in row['elements']:
+
+            ### appends and make dist and time strings so we can join them
+            result.append(str(element['duration']['value']))
+            result.append(str(element['distance']['value']))
+
+    count += 1
+    print "|".join(result)
+
+print "\n", count
