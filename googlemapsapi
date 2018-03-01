@@ -1,6 +1,6 @@
 import googlemaps
 
-key = "AIzaSyB0z-dbGWsnUXJZVeN4_E-lERVuFA9xYM8"
+key = "insert key here"
 client = googlemaps.Client(key)
 
 
